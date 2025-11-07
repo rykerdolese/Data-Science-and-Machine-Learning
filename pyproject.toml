@@ -17,10 +17,12 @@ dev = ["pytest"]
 
 # >>> These two lines make the src/ layout unambiguous <<<
 [tool.setuptools]
-package-dir = { "" = "src" }
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["mlpackage"]
+namespaces = false
 
 [tool.pytest.ini_options]
 minversion = "6.0"
