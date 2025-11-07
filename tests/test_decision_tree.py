@@ -38,3 +38,17 @@ def test_decision_tree_predict_unseen_values():
     
     preds = tree.predict(np.array([[10], [-5]]))
     assert preds.shape == (2,)
+
+# Edge cases
+def test_decision_tree_no_data():
+    X = np.array([]).reshape(0, 2)
+    y = np.array([])
+    tree = DecisionTree()
+    with pytest.raises(ValueError):
+        tree.fit(X, y)
+
+def test_decision_tree_unfitted_predict():
+    tree = DecisionTree()
+    X = np.random.rand(3, 2)
+    with pytest.raises(AttributeError):
+        tree.predict(X)

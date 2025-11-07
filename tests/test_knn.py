@@ -36,3 +36,10 @@ def test_knn_k_greater_than_samples():
     model.fit(X, y)
     preds = model.predict(X)
     assert len(preds) == 2
+
+# Edge cases
+def test_knn_predict_without_fit():
+    knn = KNN(k=3)
+    X = np.random.rand(3, 2)
+    with pytest.raises(AttributeError):
+        knn.predict(X)
