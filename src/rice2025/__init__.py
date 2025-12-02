@@ -6,6 +6,7 @@ from .preprocess import normalize, scale_minmax, train_test_split
 from .metrics import euclidean, manhattan
 from .knn import KNN
 from .postprocess import majority_vote, average_label
+from .supervised_learning import *
 
 
 __all__ = [

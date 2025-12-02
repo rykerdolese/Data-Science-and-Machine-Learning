@@ -6,6 +6,7 @@ from .multilayer_perceptron import MLP
 from .knn import KNN
 from .decision_tree import DecisionTree, RandomForest
 from .kmeans import KMeans
+from .label_propogation import LabelPropagationCustom
 
 # Optional: define what shows up when someone does `from mlpackage import *`
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "DecisionTree",
     "RandomForest",
     "KMeans",
+    "LabelPropagationCustom"
 ]
