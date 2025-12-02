@@ -38,7 +38,7 @@ matplotlib==3.10.5
 matplotlib-inline==0.2.1
 mdurl==0.1.2
 ml_dtypes==0.5.3
--e git+https://github.com/rykerdolese/Data-Science-and-Machine-Learning.git@ab8b71214c9e5c4fa6a084427bbddd217c7ce74c#egg=mlpackage
+#-e git+https://github.com/rykerdolese/Data-Science-and-Machine-Learning.git@ab8b71214c9e5c4fa6a084427bbddd217c7ce74c#egg=mlpackage
 namex==0.1.0
 nbclient==0.10.2
 nbconvert==7.16.6
