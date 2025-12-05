@@ -1,5 +1,5 @@
 import numpy as np
-from src.mlpackage.unsupervised_learning import KMeans
+from mlpackage.unsupervised_learning.kmeans import KMeans
 import pytest
 
 def test_kmeans_fit_predict():

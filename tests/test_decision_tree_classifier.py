@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from src.mlpackage.supervised_learning import DecisionTree
+from mlpackage.supervised_learning.decision_tree_classifier import DecisionTreeClassifier as DecisionTree
 
 def test_decision_tree_perfect_split():
     """

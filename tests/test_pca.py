@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from src.mlpackage.unsupervised_learning import PCA
+from mlpackage.unsupervised_learning.pca import PCA
 
 def test_pca_fit_transform_shape():
     """

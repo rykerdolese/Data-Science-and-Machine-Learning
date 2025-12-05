@@ -4,7 +4,7 @@ Unit tests for the custom DBSCAN implementation.
 
 import numpy as np
 import pytest
-from src.mlpackage.unsupervised_learning import DBSCAN
+from mlpackage.unsupervised_learning.dbscan import DBSCAN
 
 def test_dbscan_basic_clusters():
     """

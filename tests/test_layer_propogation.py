@@ -1,5 +1,5 @@
 import numpy as np
-from src.mlpackage.unsupervised_learning import LabelPropagationCustom
+from mlpackage.unsupervised_learning.label_propogation import LabelPropagationCustom
 import pytest
 from sklearn.datasets import make_moons
 

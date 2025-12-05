@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from src.mlpackage.supervised_learning import KNN
+from mlpackage.supervised_learning.knn import KNN
 
 def test_knn_basic_classification():
     """
