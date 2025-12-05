@@ -5,6 +5,7 @@ from .perceptron import Perceptron
 from .multilayer_perceptron import MLP
 from .knn import KNN
 from .decision_tree import DecisionTree, RandomForest
+from .decision_tree_regressor import DecisionTreeRegressor, RandomForestRegressor
 from .kmeans import KMeans
 from .label_propogation import LabelPropagationCustom
 
@@ -17,6 +18,8 @@ __all__ = [
     "KNN",
     "DecisionTree",
     "RandomForest",
+    "DecisionTreeRegressor",
+    "RandomForestRegressor",
     "KMeans",
     "LabelPropagationCustom"
 ]

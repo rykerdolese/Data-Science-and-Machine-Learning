@@ -1,7 +1,24 @@
+"""
+perceptron.py
+
+A simple Perceptron classifier implementation for binary classification.
+
+Features:
+- Training via weight updates with a learning rate
+- Prediction for binary labels
+- Accuracy calculation
+- Loss tracking and plotting
+- Confusion matrix generation
+
+This implementation uses a threshold activation function (step function) and
+is suitable for linearly separable data.
+"""
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
+
 
 class Perceptron:
     """
@@ -17,11 +34,11 @@ class Perceptron:
     Attributes
     ----------
     weights : np.ndarray
-        Learned weights.
+        Learned weights for input features.
     bias : float
         Learned bias term.
     loss_ : list
-        Loss at each iteration.
+        Mean squared error loss recorded for each iteration.
     """
 
     def __init__(self, learning_rate=0.01, n_iterations=1000):
@@ -33,7 +50,21 @@ class Perceptron:
         np.random.seed(42)
 
     def _calculate_loss(self, y_true, y_pred):
-        """Mean squared error."""
+        """
+        Compute mean squared error loss.
+
+        Parameters
+        ----------
+        y_true : np.ndarray
+            True labels.
+        y_pred : np.ndarray
+            Predicted labels.
+
+        Returns
+        -------
+        float
+            Mean squared error.
+        """
         return np.mean((y_true - y_pred) ** 2)
 
     def fit(self, X, y):
@@ -42,10 +73,15 @@ class Perceptron:
 
         Parameters
         ----------
-        X : np.ndarray, shape (n_samples, n_features)
+        X : np.ndarray of shape (n_samples, n_features)
             Input features.
-        y : np.ndarray, shape (n_samples,)
+        y : np.ndarray of shape (n_samples,)
             Binary target labels (0 or 1).
+
+        Returns
+        -------
+        self : Perceptron
+            Fitted Perceptron model.
         """
         n_samples, n_features = X.shape
         self.weights = np.random.rand(n_features)
@@ -59,23 +95,51 @@ class Perceptron:
                 self.weights += update * x_i
                 self.bias += update
 
-            # Compute loss for this iteration
             y_pred_full = self.predict(X)
             self.loss_.append(self._calculate_loss(y, y_pred_full))
+
         return self
 
     def predict(self, X):
-        """Predict binary labels for input features."""
+        """
+        Predict binary labels for input features.
+
+        Parameters
+        ----------
+        X : np.ndarray of shape (n_samples, n_features)
+            Input features.
+
+        Returns
+        -------
+        np.ndarray
+            Predicted binary labels (0 or 1).
+        """
         linear_output = np.dot(X, self.weights) + self.bias
         return np.where(linear_output >= 0, 1, 0)
 
     def accuracy(self, X, y):
-        """Compute accuracy of predictions."""
+        """
+        Compute the accuracy of predictions.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Input features.
+        y : np.ndarray
+            True labels.
+
+        Returns
+        -------
+        float
+            Fraction of correctly classified samples.
+        """
         y_pred = self.predict(X)
         return accuracy_score(y, y_pred)
 
     def plot_loss(self):
-        """Plot loss curve over iterations."""
+        """
+        Plot loss curve over iterations.
+        """
         plt.plot(range(len(self.loss_)), self.loss_, marker='o')
         plt.title('Perceptron Loss over Iterations')
         plt.xlabel('Iteration')
@@ -84,6 +148,21 @@ class Perceptron:
         plt.show()
 
     def confusion_matrix(self, X, y):
-        """Return confusion matrix as a pandas DataFrame."""
+        """
+        Compute confusion matrix as a pandas DataFrame.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Input features.
+        y : np.ndarray
+            True labels.
+
+        Returns
+        -------
+        pd.DataFrame
+            Confusion matrix with actual labels as rows and predicted labels as columns.
+        """
         y_pred = self.predict(X)
         return pd.crosstab(y, y_pred, rownames=['Actual'], colnames=['Predicted'])
+

@@ -1,6 +1,29 @@
+"""
+label_propagation_custom.py
+---------------------------
+
+A from-scratch implementation of graph-based Label Propagation for 
+semi-supervised learning.
+
+This module provides:
+- Construction of an RBF-kernel similarity graph.
+- Row-normalized transition matrix for probability propagation.
+- Iterative label propagation with optional clamping of labeled nodes.
+- One-hot encoding of initial labels and soft label distribution updates.
+- Final hard-label predictions via argmax over propagated distributions.
+
+The algorithm assumes:
+- Input labels use `-1` to mark unlabeled samples.
+- Features are continuous and reasonably scaled (RBF kernel sensitive to scale).
+
+This implementation is designed primarily for instructional and 
+prototype experimentation.
+"""
+
 from typing import Optional
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
+
 
 class LabelPropagationCustom:
     """
@@ -22,36 +45,39 @@ class LabelPropagationCustom:
     clamp : bool
         Whether to keep original labels fixed during propagation.
 
-    After fitting:
-    --------------
-    classes_ : array
-        Array of label classes.
+    After fitting
+    -------------
+    classes_ : ndarray
+        Unique label classes.
     n_classes_ : int
         Number of unique classes.
-    Y : ndarray
-        One-hot encoded label matrix.
-    T : ndarray
-        Row-normalized RBF affinity (transition) matrix.
-    F : ndarray
-        Final propagated label distribution matrix.
-    y_pred : ndarray
-        Predicted labels (argmax over F).
+    Y : ndarray of shape (n_samples, n_classes)
+        One-hot encoded initial label matrix.
+    T : ndarray of shape (n_samples, n_samples)
+        Row-normalized RBF transition matrix.
+    F : ndarray of shape (n_samples, n_classes)
+        Final soft label distribution matrix after propagation.
+    y_pred : ndarray of shape (n_samples,)
+        Final predicted labels as class indices.
     """
 
-    def __init__(self, alpha: float = 0.9, sigma: float = 1.0, max_iter: int = 1000, tol: float = 1e-4, clamp: bool = True):
+    def __init__(self, alpha: float = 0.9, sigma: float = 1.0,
+                 max_iter: int = 1000, tol: float = 1e-4, clamp: bool = True):
         """
+        Initialize the Label Propagation model.
+
         Parameters
         ----------
         alpha : float
-            Weight for propagation vs. initial labels.
+            Weight for propagation versus initial labels (0 < alpha < 1).
         sigma : float
-            RBF kernel width.
+            Width of the RBF kernel used for similarity computation.
         max_iter : int
-            Maximum iterations for label propagation.
+            Maximum number of propagation iterations.
         tol : float
-            Convergence tolerance.
+            Convergence tolerance for stopping criterion.
         clamp : bool
-            Whether to clamp labeled points during iterations.
+            If True, labeled points remain fixed during propagation.
         """
         self.alpha = alpha
         self.sigma = sigma
@@ -65,19 +91,22 @@ class LabelPropagationCustom:
 
         Parameters
         ----------
-        X : np.ndarray
-            Feature matrix of shape (n_samples, n_features).
+        X : ndarray of shape (n_samples, n_features)
+            Input feature matrix.
 
         Returns
         -------
-        W : np.ndarray
-            Affinity matrix of shape (n_samples, n_samples).
+        W : ndarray of shape (n_samples, n_samples)
+            RBF affinity (similarity) matrix.
         """
-        sq_dists = np.sum(X**2, axis=1).reshape(-1, 1) + \
-                   np.sum(X**2, axis=1) - \
-                   2 * (X @ X.T)
+        sq_dists = (
+            np.sum(X**2, axis=1).reshape(-1, 1)
+            + np.sum(X**2, axis=1)
+            - 2 * (X @ X.T)
+        )
+
         W = np.exp(-sq_dists / (2 * self.sigma**2))
-        np.fill_diagonal(W, 0)  # Remove self-loops
+        np.fill_diagonal(W, 0)  # Remove self-similarities
         return W
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "LabelPropagationCustom":
@@ -86,21 +115,22 @@ class LabelPropagationCustom:
 
         Parameters
         ----------
-        X : np.ndarray
-            Feature matrix of shape (n_samples, n_features).
-        y : np.ndarray
-            Labels with -1 for unlabeled points.
+        X : ndarray of shape (n_samples, n_features)
+            Input feature matrix.
+        y : ndarray of shape (n_samples,)
+            Label vector where labeled points have integer labels
+            and unlabeled points are marked with -1.
 
         Returns
         -------
         self : LabelPropagationCustom
-            Fitted model.
+            The fitted model.
         """
         self.X = X
         n = X.shape[0]
         labeled_mask = (y != -1)
 
-        # Step 1: One-hot encode labeled points
+        # --- One-hot encode labeled points ---
         encoder = OneHotEncoder(sparse_output=False)
         true_labels = y[labeled_mask].reshape(-1, 1)
         Y_labeled = encoder.fit_transform(true_labels)
@@ -108,19 +138,21 @@ class LabelPropagationCustom:
         self.classes_ = encoder.categories_[0]
         self.n_classes_ = len(self.classes_)
 
-        # Step 2: Initialize full label matrix
+        # --- Initialize label matrix ---
         self.Y = np.zeros((n, self.n_classes_))
         self.Y[labeled_mask] = Y_labeled
 
-        # Step 3: Build affinity and transition matrix
+        # --- Build similarity and transition matrices ---
         W = self._rbf_affinity(X)
         T = W / (W.sum(axis=1, keepdims=True) + 1e-12)
         self.T = T
 
-        # Step 4: Iterative propagation
+        # --- Label propagation iterations ---
         F = self.Y.copy()
+
         for _ in range(self.max_iter):
             F_new = self.alpha * (T @ F) + (1 - self.alpha) * self.Y
+
             if self.clamp:
                 F_new[labeled_mask] = self.Y[labeled_mask]
 
@@ -130,8 +162,6 @@ class LabelPropagationCustom:
             F = F_new
 
         self.F = F
-
-        # Step 5: Final predictions
         self.y_pred = np.argmax(F, axis=1)
 
         return self
@@ -142,12 +172,13 @@ class LabelPropagationCustom:
 
         Parameters
         ----------
-        X : np.ndarray, optional
-            Not used, kept for API compatibility.
+        X : ndarray, optional
+            Not used. Included for API compatibility with sklearn.
 
         Returns
         -------
-        y_pred : np.ndarray
-            Predicted labels for all points.
+        ndarray of shape (n_samples,)
+            Predicted labels as integer class indices.
         """
         return self.y_pred
+

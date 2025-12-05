@@ -1,20 +1,46 @@
+"""
+metrics.py
+
+A minimal implementation of fundamental classification metrics, including:
+
+- accuracy_score : fraction of correctly predicted labels
+- classification_report : precision, recall, and F1-score per class
+
+These functions offer lightweight, NumPy-based alternatives to
+sklearn.metrics for educational and experimental purposes.
+
+Typical usage
+-------------
+acc = accuracy_score(y_true, y_pred)
+report = classification_report(y_true, y_pred)
+"""
+
 import numpy as np
+
+
 def accuracy_score(y_true, y_pred):
     """
     Compute the accuracy classification score.
+
+    Accuracy is defined as:
+        accuracy = (number of correct predictions) / (total predictions)
 
     Parameters
     ----------
     y_true : array-like of shape (n_samples,)
         Ground truth (correct) labels.
-
     y_pred : array-like of shape (n_samples,)
-        Predicted labels, as returned by a classifier.
+        Predicted labels from a classifier.
 
     Returns
     -------
-    score : float
-        The fraction of correctly classified samples.
+    float
+        Fraction of correctly classified samples.
+
+    Raises
+    ------
+    ValueError
+        If y_true and y_pred have different lengths.
     """
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
@@ -24,23 +50,37 @@ def accuracy_score(y_true, y_pred):
 
     return np.mean(y_true == y_pred)
 
-# classification_report function can be added here similarly if needed
+
 def classification_report(y_true, y_pred):
     """
-    Generate a classification report.
+    Generate a classification report containing precision, recall, and F1-score per class.
+
+    Precision:
+        tp / (tp + fp)
+
+    Recall:
+        tp / (tp + fn)
+
+    F1-score:
+        2 * (precision * recall) / (precision + recall)
 
     Parameters
     ----------
     y_true : array-like of shape (n_samples,)
-        Ground truth (correct) labels.
-
+        Ground truth labels.
     y_pred : array-like of shape (n_samples,)
-        Predicted labels, as returned by a classifier.
+        Predicted labels.
 
     Returns
     -------
-    report : dict
-        A dictionary containing precision, recall, f1-score for each class.
+    dict
+        A dictionary mapping each class to a metrics dictionary with keys:
+        'precision', 'recall', 'f1-score'.
+
+    Raises
+    ------
+    ValueError
+        If y_true and y_pred have different lengths.
     """
     from collections import defaultdict
 
@@ -60,10 +100,14 @@ def classification_report(y_true, y_pred):
 
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+        f1 = (
+            2 * (precision * recall) / (precision + recall)
+            if (precision + recall) > 0
+            else 0.0
+        )
 
-        report[cls]['precision'] = precision
-        report[cls]['recall'] = recall
-        report[cls]['f1-score'] = f1
+        report[cls]["precision"] = precision
+        report[cls]["recall"] = recall
+        report[cls]["f1-score"] = f1
 
     return dict(report)
