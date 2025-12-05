@@ -1,5 +1,5 @@
 import numpy as np
-from mlpackage.perceptron import Perceptron
+from mlpackage.supervised_learning.perceptron import Perceptron
 import pytest
 
 def test_perceptron_linearly_separable():

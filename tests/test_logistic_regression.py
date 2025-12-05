@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from mlpackage.logistic_regression import LogisticRegression
+from mlpackage.supervised_learning.logistic_regression import LogisticRegression
 
 def test_logistic_regression_basic():
     """

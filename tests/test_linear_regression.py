@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from src.mlpackage import LinearRegression
+from src.mlpackage.supervised_learning import LinearRegression
 
 def test_linear_regression_perfect_fit():
     """

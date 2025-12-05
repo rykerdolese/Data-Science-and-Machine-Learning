@@ -1,5 +1,5 @@
 import numpy as np
-from src.mlpackage import MLP
+from src.mlpackage.supervised_learning import MLP
 import pytest
 
 def test_mlp_forward_shape():

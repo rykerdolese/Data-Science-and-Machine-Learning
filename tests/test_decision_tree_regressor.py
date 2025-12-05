@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from src.mlpackage import DecisionTreeRegressor  # adjust import as needed
+from src.mlpackage.supervised_learning import DecisionTreeRegressor  # adjust import as needed
 
 def test_decision_tree_regressor_perfect_split():
     """
