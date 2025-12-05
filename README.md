@@ -1,9 +1,17 @@
 # MLPackage: End-to-End Machine Learning Package
 
 ## Overview
-`MLPackage` is a comprehensive end-to-end machine learning framework that provides implementations of supervised, unsupervised, and reinforcement learning algorithms. It is designed for educational purposes, experiments, and rapid prototyping, while also including utilities for preprocessing, evaluation, and visualization.
+`MLPackage` is a **comprehensive end-to-end machine learning framework** designed for educational purposes, experimentation, and rapid prototyping.  
+It provides **implementations of supervised, unsupervised, and reinforcement learning algorithms**, along with utilities for preprocessing, evaluation, and visualization.  
 
-The package comes with multiple example datasets, fully unit-tested algorithms, and modular code structure to support easy extension.
+Key features include:
+- Modular and extensible architecture for adding new algorithms.
+- Built-in **data preprocessing** tools (scalers, encoders, train/test split).
+- Support for **performance evaluation** (accuracy, confusion matrix, classification reports, RMSE, R², etc.).
+- **Visualization helpers** for decision boundaries, loss curves, and clustering results.
+- Fully unit-tested and reproducible pipelines.
+
+The package comes with **example datasets** and scripts to demonstrate practical usage.
 
 ---
 
@@ -13,43 +21,43 @@ The package comes with multiple example datasets, fully unit-tested algorithms, 
 ├── dl_env/ # Python virtual environment
 ├── example.py # Sample script demonstrating package usage
 ├── other/ # Additional unit and integration tests
-│ ├── integration/
-│ └── unit/
+│   ├── integration/
+│   └── unit/
 ├── pyproject.toml # Project configuration
 ├── pytest.ini # Pytest configuration
-├── README.md # This file
-├── Reinforcement Learning/ # Reinforcement learning examples
+├── README.md # Main project README
+├── Reinforcement Learning/ # Reinforcement learning examples (to be extended)
 ├── setup.py # Package installation
 ├── src/
-│ ├── mlpackage/ # Core package code
-│ ├── mlpackage.egg-info/
-│ ├── README.md # Package-specific readme
-│ └── rice2025/
+│   ├── mlpackage/ # Core package code
+│   ├── mlpackage.egg-info/
+│   ├── README.md # Package-specific README
+│   └── rice2025/
 ├── Supervised Learning/ # Supervised learning examples
-│ ├── Decision Trees/
-│ ├── Ensembles/
-│ ├── KNN/
-│ ├── Linear Regression/
-│ ├── Logistic Regression/
-│ ├── Neural Networks/
-│ └── Perceptron/
+│   ├── Decision Trees/
+│   ├── Ensembles/
+│   ├── KNN/
+│   ├── Linear Regression/
+│   ├── Logistic Regression/
+│   ├── Neural Networks/
+│   └── Perceptron/
 ├── tests/ # Unit tests
-│ ├── init.py
-│ ├── test_decision_tree.py
-│ ├── test_kmeans.py
-│ ├── test_knn.py
-│ ├── test_linear_regression.py
-│ ├── test_logistic_regression.py
-│ ├── test_metrics.py
-│ ├── test_mlp.py
-│ ├── test_perceptron.py
-│ └── test_preprocess.py
+│   ├── __init__.py
+│   ├── test_decision_tree.py
+│   ├── test_kmeans.py
+│   ├── test_knn.py
+│   ├── test_linear_regression.py
+│   ├── test_logistic_regression.py
+│   ├── test_metrics.py
+│   ├── test_mlp.py
+│   ├── test_perceptron.py
+│   └── test_preprocess.py
 ├── tests.yml # Test configuration
 └── Unsupervised Learning/ # Unsupervised learning examples
-├── DBSCAN/
-├── K-means/
-├── PCA/
-└── SVD/
+    ├── DBSCAN/
+    ├── K-means/
+    ├── PCA/
+    └── SVD/
 ```
 ---
 
@@ -57,53 +65,101 @@ The package comes with multiple example datasets, fully unit-tested algorithms, 
 
 ### Supervised Learning
 - **Linear Regression** — Ordinary Least Squares (OLS) with RMSE and R² evaluation.
-- **Logistic Regression** — Batch gradient descent with sigmoid activation, probability outputs, and accuracy.
-- **K-Nearest Neighbors (KNN)** — Classic distance-based classification.
-- **Decision Trees** — Recursive tree-building with information gain and entropy.
+- **Logistic Regression** — Batch gradient descent with sigmoid activation, probability outputs, and accuracy metrics.
+- **K-Nearest Neighbors (KNN)** — Classic distance-based classifier supporting multiple distance metrics.
+- **Decision Trees** — Recursive tree-building using information gain and entropy (classification) or variance reduction (regression).
 - **Perceptron** — Single-layer neural network for binary classification.
 - **Multi-Layer Perceptron (MLP)** — Feedforward neural network with backpropagation, softmax output, and cross-entropy loss.
 
 ### Unsupervised Learning
 - **K-Means Clustering** — Centroid-based clustering with inertia computation.
-- **DBSCAN** — Density-based clustering.
-- **PCA** — Dimensionality reduction.
-- **SVD** — Singular value decomposition for feature extraction.
+- **DBSCAN** — Density-based clustering for arbitrary-shaped clusters.
+- **PCA** — Dimensionality reduction and variance analysis.
+- **SVD** — Singular value decomposition for feature extraction and latent representation.
 
 ### Reinforcement Learning
-- Placeholder directory for RL implementations (to be extended).
+- Placeholder directory for RL algorithms (Q-Learning, Policy Gradient, etc.) to be extended in future versions.
+
+---
+
+## Utilities
+
+- **Preprocessing**
+  - `MinMaxScaler`, `StandardScaler` — Feature scaling.
+  - `OrdinalEncoder` — Convert categorical features to numerical codes.
+  - `train_test_split` — Flexible train/test partitioning.
+- **Metrics**
+  - `accuracy_score`, `classification_report`, RMSE, R².
+- **Visualization**
+  - Decision boundaries for classifiers.
+  - Loss curves for neural networks.
+  - Cluster plots for unsupervised learning.
 
 ---
 
 ## Example Datasets
 
 ### Bank Churn
-- `Surname`, `CreditScore`, `Age`, `Tenure`, `Balance`, `NumOfProducts`, `HasCrCard`, `IsActiveMember`, `EstimatedSalary`, `Exited`
-- Derived features: `Surname_tfidf_*`, one-hot encoded `Country` and `Gender`, engineered ratios like `Cred_Bal_Sal`, `Bal_sal`, `Tenure_Age`, `Age_Tenure_product`.
+- Features: `CreditScore`, `Age`, `Tenure`, `Balance`, `NumOfProducts`, `HasCrCard`, `IsActiveMember`, `EstimatedSalary`, `Exited`.
+- Derived features: TF-IDF of surname, engineered ratios (`Cred_Bal_Sal`, `Bal_sal`, `Tenure_Age`), and one-hot encoded `Country` and `Gender`.
 
 ### Loan Data
-- `person_age`, `person_gender`, `person_education`, `person_income`, `person_emp_exp`, `person_home_ownership`, `loan_amnt`, `loan_intent`, `loan_int_rate`, `loan_percent_income`, `cb_person_cred_hist_length`, `credit_score`, `previous_loan_defaults_on_file`, `loan_status`.
+- Features: `person_age`, `person_gender`, `person_education`, `person_income`, `loan_amnt`, `loan_intent`, `loan_int_rate`, `credit_score`, etc.
 
 ### Student Marks
-- `number_courses`, `time_study`, `Marks`.
+- Features: `number_courses`, `time_study`, `Marks`.
 
 ### Titanic
-- `PassengerId`, `Survived`, `Pclass`, `Name`, `Sex`, `Age`, `SibSp`, `Parch`, `Ticket`, `Fare`, `Cabin`, `Embarked`.
+- Features: `PassengerId`, `Survived`, `Pclass`, `Name`, `Sex`, `Age`, `SibSp`, `Parch`, `Ticket`, `Fare`, `Cabin`, `Embarked`.
 
 ### Wine
-- `Alcohol`, `Malic_Acid`, `Ash`, `Ash_Alcanity`, `Magnesium`, `Total_Phenols`, `Flavanoids`, `Nonflavanoid_Phenols`, `Proanthocyanins`, `Color_Intensity`, `Hue`, `OD280`, `Proline`.
+- Features: `Alcohol`, `Malic_Acid`, `Ash`, `Ash_Alcanity`, `Magnesium`, `Total_Phenols`, `Flavanoids`, `Color_Intensity`, `Hue`, `OD280`, `Proline`.
 
 ---
 
 ## Testing
 
-- Unit tests are located in `tests/`.
-- Tests cover:
+- Unit tests cover:
   - Correct implementation of ML algorithms.
   - Edge cases (empty inputs, invalid parameters).
-  - Preprocessing utilities (MinMaxScaler, OrdinalEncoder).
-- Run tests using:
+  - Preprocessing utilities (scalers, encoders, split functions).
+  - Metric computation and evaluation functions.
+- Run tests with:
+
 ```bash
 pytest
+```
+---
+
+## Installation
+
+```bash
+git clone <repo_url>
+cd MLPackage
+pip install -e .
+```
+
+---
+
+## Getting Started
+
+```python
+from src.mlpackage import LinearRegression, KNN, train_test_split, MinMaxScaler
+
+# Load data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Preprocessing
+scaler = MinMaxScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train model
+model = LinearRegression()
+model.fit(X_train_scaled, y_train)
+
+# Evaluate
+print("R²:", model.R_squared(X_test_scaled, y_test))
 ```
 
 

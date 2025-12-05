@@ -34,7 +34,7 @@ import matplotlib.pyplot as plt
 # Define basic decision tree class
 import numpy as np
 
-class DecisionTree:
+class DecisionTreeClassifier:
     """
     A simple Decision Tree classifier using information gain and entropy.
 
@@ -274,7 +274,7 @@ class DecisionTree:
         return np.mean(y_pred == y)
 
 
-class RandomForest:
+class RandomForestClassifier:
     """
     A simple Random Forest classifier built on top of the custom DecisionTree.
 
