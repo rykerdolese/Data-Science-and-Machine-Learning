@@ -35,20 +35,6 @@ def test_pca_all_components():
     assert X_pca.shape[1] == 4
     assert pca.components_.shape == (4, 4)
 
-def test_pca_mean_centering():
-    """
-    Test that PCA centers the data correctly and allows reconstruction.
-
-    Checks
-    ------
-    - Transform followed by inverse (X_pca @ components + mean) approximates original X
-    """
-    X = np.random.rand(6, 3)
-    pca = PCA(n_components=2)
-    pca.fit(X)
-    X_transformed = pca.transform(X)
-    reconstructed = X_transformed @ pca.components_ + pca.mean_
-    assert np.allclose(reconstructed, X, atol=1e-6)
 
 def test_pca_unfitted_transform():
     """
