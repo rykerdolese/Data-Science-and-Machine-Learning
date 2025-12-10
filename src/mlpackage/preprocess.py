@@ -1,19 +1,43 @@
-"""Simple preprocessing helpers: normalization, min-max scaling and train/test split.
-These implementations are intentionally lightweight for unit testing and clarity.
 """
+preprocessing.py
+
+Simple preprocessing helpers for machine learning:
+
+- Train/test split for NumPy arrays and pandas DataFrames
+- Min-max scaling
+- Standardization (z-score)
+- Ordinal encoding for categorical features
+
+These implementations are intentionally lightweight for clarity and unit testing.
+"""
+
 from typing import Tuple
-import math
-import numpy as np
-
-import random
-
 import numpy as np
 import pandas as pd
+import random
 
-def train_test_split(X, y, test_size=0.2, shuffle=True, random_state=None):
+
+def train_test_split(X, y, test_size=0.2, shuffle=True, random_state=None) -> Tuple:
     """
     Split arrays or DataFrames into random train and test subsets.
-    Works with both NumPy arrays and pandas DataFrames/Series.
+
+    Parameters
+    ----------
+    X : np.ndarray or pd.DataFrame
+        Input features.
+    y : np.ndarray, pd.Series, or pd.DataFrame
+        Target values.
+    test_size : float, default=0.2
+        Proportion of the dataset to include in the test split.
+    shuffle : bool, default=True
+        Whether to shuffle the data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Returns
+    -------
+    X_train, X_test, y_train, y_test
+        Split datasets.
     """
     if random_state is not None:
         np.random.seed(random_state)
@@ -27,7 +51,6 @@ def train_test_split(X, y, test_size=0.2, shuffle=True, random_state=None):
     test_idx = indices[:test_size]
     train_idx = indices[test_size:]
     
-    # Handle pandas or numpy separately
     if isinstance(X, (pd.DataFrame, pd.Series)):
         X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
     else:
@@ -43,12 +66,29 @@ def train_test_split(X, y, test_size=0.2, shuffle=True, random_state=None):
 
 class MinMaxScaler:
     """
-    Scale features to a given range (default 0 to 1).
+    Scale features to a specified range (default 0 to 1).
+
+    Parameters
+    ----------
+    feature_range : tuple (min, max), default=(0,1)
+        Desired range of transformed data.
+
+    Attributes
+    ----------
+    min_ : np.ndarray
+        Minimum value for each feature.
+    max_ : np.ndarray
+        Maximum value for each feature.
+    scale_ : np.ndarray
+        Scale factor for each feature.
+    min_adj_ : np.ndarray
+        Adjustment to shift features into desired range.
     """
     def __init__(self, feature_range=(0, 1)):
         self.feature_range = feature_range
         
     def fit(self, X):
+        """Compute min, max, and scaling factor from data."""
         self.min_ = X.min(axis=0)
         self.max_ = X.max(axis=0)
         self.scale_ = (self.feature_range[1] - self.feature_range[0]) / (self.max_ - self.min_)
@@ -56,44 +96,73 @@ class MinMaxScaler:
         return self
     
     def transform(self, X):
+        """Scale features of X according to fitted min and scale."""
         return X * self.scale_ + self.min_adj_
     
     def fit_transform(self, X):
+        """Fit to data then transform it."""
         return self.fit(X).transform(X)
+
 
 class StandardScaler:
     """
     Standardize features by removing the mean and scaling to unit variance.
+
+    Attributes
+    ----------
+    mean_ : np.ndarray
+        Mean of each feature in the training data.
+    std_ : np.ndarray
+        Standard deviation of each feature in the training data.
     """
     def fit(self, X):
+        """Compute mean and standard deviation for scaling."""
         self.mean_ = X.mean(axis=0)
         self.std_ = X.std(axis=0)
-        # Avoid divide-by-zero
-        self.std_[self.std_ == 0] = 1.0
+        self.std_[self.std_ == 0] = 1.0  # Prevent division by zero
         return self
     
     def transform(self, X):
+        """Standardize features of X according to fitted mean and std."""
         return (X - self.mean_) / self.std_
     
     def fit_transform(self, X):
+        """Fit to data then transform it."""
         return self.fit(X).transform(X)
 
 
-import numpy as np
-import pandas as pd
-
 class OrdinalEncoder:
+    """
+    Encode categorical features as integers.
+
+    Parameters
+    ----------
+    categories : 'auto' or list of lists, default='auto'
+        - 'auto': determine categories from data
+        - list of lists: predefined category order for each feature
+
+    Attributes
+    ----------
+    category_maps : dict
+        Maps each feature's categories to integer labels.
+    """
     def __init__(self, categories='auto'):
-        """
-        categories: list of lists defining category order for each feature,
-                    or 'auto' to infer from data.
-        """
         self.categories = categories
         self.category_maps = {}
 
     def fit(self, X):
         """
-        X: pandas DataFrame or 2D array of categorical features.
+        Fit the encoder to X.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Categorical input features.
+
+        Returns
+        -------
+        self : OrdinalEncoder
+            Fitted encoder.
         """
         X = np.array(X)
         n_features = X.shape[1]
@@ -110,7 +179,17 @@ class OrdinalEncoder:
 
     def transform(self, X):
         """
-        Transform categorical values to their integer encodings.
+        Transform categorical features to integer encodings.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Categorical input features.
+
+        Returns
+        -------
+        X_out : np.ndarray, shape (n_samples, n_features)
+            Integer-encoded features.
         """
         X = np.array(X)
         X_out = np.zeros_like(X, dtype=float)
@@ -122,7 +201,9 @@ class OrdinalEncoder:
         return X_out
 
     def fit_transform(self, X):
+        """Fit to data then transform it."""
         return self.fit(X).transform(X)
+
 
 
 

@@ -1,0 +1,20 @@
+# requirements-ci.txt — only packages needed to run tests
+pytest==8.4.2
+numpy==2.0.2
+pandas==2.2.3
+scipy==1.13.1
+scikit-learn==1.5.2
+matplotlib==3.9.2
+seaborn==0.13.2
+requests==2.32.3
+joblib==1.4.2
+psutil==6.0.0
+pyzmq==26.2.0
+packaging==24.2
+pyparsing==3.2.0
+python-dateutil==2.9.0.post0
+pytz==2024.1
+typing_extensions==4.12.2
+rich==13.7.1
+
+
