@@ -18,46 +18,50 @@ The package comes with **example datasets** and scripts to demonstrate practical
 ## Project Structure
 
 ```bash
-├── dl_env/ # Python virtual environment
-├── example.py # Sample script demonstrating package usage
-├── other/ # Additional unit and integration tests
-│   ├── integration/
-│   └── unit/
-├── pyproject.toml # Project configuration
-├── pytest.ini # Pytest configuration
-├── README.md # Main project README
-├── Reinforcement Learning/ # Reinforcement learning examples (to be extended)
-├── setup.py # Package installation
-├── src/
-│   ├── mlpackage/ # Core package code
-│   ├── mlpackage.egg-info/
-│   ├── README.md # Package-specific README
-│   └── rice2025/
-├── Supervised Learning/ # Supervised learning examples
-│   ├── Decision Trees/
-│   ├── Ensembles/
-│   ├── KNN/
-│   ├── Linear Regression/
-│   ├── Logistic Regression/
-│   ├── Neural Networks/
-│   └── Perceptron/
-├── tests/ # Unit tests
-│   ├── __init__.py
-│   ├── test_decision_tree.py
-│   ├── test_kmeans.py
-│   ├── test_knn.py
-│   ├── test_linear_regression.py
-│   ├── test_logistic_regression.py
-│   ├── test_metrics.py
-│   ├── test_mlp.py
-│   ├── test_perceptron.py
-│   └── test_preprocess.py
-├── tests.yml # Test configuration
-└── Unsupervised Learning/ # Unsupervised learning examples
-    ├── DBSCAN/
-    ├── K-means/
-    ├── PCA/
-    └── SVD/
+.
+├── examples
+│   ├── Supervised Learning
+│   │   ├── Decision Trees
+│   │   ├── Ensembles
+│   │   ├── KNN
+│   │   ├── Linear Regression
+│   │   ├── Logistic Regression
+│   │   ├── Neural Networks
+│   │   └── Perceptron
+│   └── Unsupervised Learning
+│       ├── DBSCAN
+│       ├── K-means
+│       ├── Label Propogation
+│       ├── PCA
+│       └── SVD
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── requirements.txt
+├── setup.py
+├── src
+│   └── mlpackage
+│       ├── __init__.py
+│       ├── metrics.py
+│       ├── preprocess.py
+│       ├── supervised_learning
+│       └── unsupervised_learning
+└── tests
+    ├── __init__.py
+    ├── test_dbscan.py
+    ├── test_decision_tree_classifier.py
+    ├── test_decision_tree_regressor.py
+    ├── test_kmeans.py
+    ├── test_knn.py
+    ├── test_layer_propogation.py
+    ├── test_linear_regression.py
+    ├── test_logistic_regression.py
+    ├── test_metrics.py
+    ├── test_mlp.py
+    ├── test_pca.py
+    ├── test_perceptron.py
+    └── test_preprocess.py
+
 ```
 ---
 
